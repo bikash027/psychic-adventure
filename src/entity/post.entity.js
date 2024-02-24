@@ -40,17 +40,17 @@ const Post = new typeorm.EntitySchema({
         event: {
             target: 'Event',
             type: 'many-to-one',
-            joinColumn: 'event_id'
+            joinColumn: {name: 'event_id'}
         },
         sport: {
             target: 'Sport',
             type: 'many-to-one',
-            joinColumn: 'sport_id'
+            joinColumn: {name: 'sport_id'}
         },
         user: {
             target: 'User',
             type: 'many-to-one',
-            joinColumn: 'user_id'
+            joinColumn: {name: 'user_id'}
         }
     }
 })

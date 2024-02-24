@@ -26,7 +26,7 @@ const Event = new typeorm.EntitySchema({
         sport: {
             target: 'Sport',
             type: 'many-to-one',
-            joinColumn: 'sport_id'
+            joinColumn: {name: 'sport_id'}
         }
     }
 })

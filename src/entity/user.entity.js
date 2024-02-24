@@ -14,7 +14,11 @@ const User = new typeorm.EntitySchema({
             nullable: false,
         },
         interests: {
-            type: 'varchar',
+            type: 'simple-json',
+            nullable: true
+        },
+        popularityScore: {
+            type: 'int',
             nullable: true
         }
     },
