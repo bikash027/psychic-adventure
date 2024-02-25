@@ -6,12 +6,10 @@ const Event = require('./entity/event.entity.js');
 const Post = require('./entity/post.entity.js');
 
 const dataSource = new typeorm.DataSource({
-    // type: "sqlite",
-    // database: `${root}/data/dev.sqlite`,
     type: process.env.NODE_ENV == 'production'?'mysql': 'sqlite',
     host: process.env.NODE_ENV == 'production'? process.env.MYSQLHOST: null,
     port: process.env.NODE_ENV == 'production'? process.env.MYSQLPORT: null,
-    database: process.env.NODE_ENV == 'production'? process.env.MYSQLDATABASE: `${root}/data/test.sqlite`,
+    database: process.env.NODE_ENV == 'production'? process.env.MYSQLDATABASE: `${root}/data/${process.env.NODE_ENV??'test'}.sqlite`,
     username: process.env.NODE_ENV == 'production'? process.env.MYSQLUSER: null,
     password: process.env.NODE_ENV == 'production'? process.env.MYSQLPASSWORD: null,
     entities: [ User, Sport, Event, Post],

@@ -113,7 +113,6 @@ const addData = async ({table, num}) => {
 }
 
 const displayData = async ({table, page, limit}) => {
-    // let {page, limit} = options;
     page = page? parseInt(page): 1;
     limit = limit? parseInt(limit): 10;
     let Entity;

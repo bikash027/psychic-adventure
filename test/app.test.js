@@ -48,11 +48,6 @@ describe('Recommendation API', () => {
         });
         const res = await request(app)
             .get('/api/recommendations/users/' + firstUser.id)
-            // .send({
-            //     userId: 1,
-            //     title: 'test is cool',
-            // })
         expect(res.statusCode).toEqual(200)
-        // expect(res.body).toHaveProperty('post')
     })
 })
