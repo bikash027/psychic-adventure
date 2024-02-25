@@ -8,14 +8,14 @@ const Post = require('./entity/post.entity.js');
 const dataSource = new typeorm.DataSource({
     // type: "sqlite",
     // database: `${root}/data/dev.sqlite`,
-    type: 'mysql',
-    host: process.env.MYSQLHOST,
-    port: process.env.MYSQLPORT,
-    database: process.env.MYSQLDATABASE,
-    username: process.env.MYSQLUSER,
-    password: process.env.MYSQLPASSWORD,
+    type: process.env.NODE_ENV == 'production'?'mysql': 'sqlite',
+    host: process.env.NODE_ENV == 'production'? process.env.MYSQLHOST: null,
+    port: process.env.NODE_ENV == 'production'? process.env.MYSQLPORT: null,
+    database: process.env.NODE_ENV == 'production'? process.env.MYSQLDATABASE: `${root}/data/test.sqlite`,
+    username: process.env.NODE_ENV == 'production'? process.env.MYSQLUSER: null,
+    password: process.env.NODE_ENV == 'production'? process.env.MYSQLPASSWORD: null,
     entities: [ User, Sport, Event, Post],
-    synchronize: false,
+    synchronize: process.env.NODE_ENV == 'production'? false: true,
     // logging: true
 })
 
@@ -31,6 +31,6 @@ async function initDB(){
     }
 }
 
-initDB();
+// initDB();
 
 module.exports = {dataSource, initDB};

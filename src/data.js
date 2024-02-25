@@ -12,7 +12,6 @@ program.command('add')
         await initDB();
         num = parseInt(num);
         await addData({
-            dataSource,
             table: options.table,
             num
         })
@@ -27,7 +26,6 @@ program.command('display')
     .action(async (table, options) => {
         await initDB();
         await displayData({
-            dataSource,
             table,
             ...options
         })

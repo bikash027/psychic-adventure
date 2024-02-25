@@ -41,7 +41,6 @@ app.post('/api/add', async (req, res, next) => {
     try{
         const {table, itemCount} = req.body;
         const resContent = await addData({
-            dataSource,
             table,
             num: itemCount
         })
@@ -55,7 +54,6 @@ app.get('/api/display', async (req, res, next) => {
     try{
         const {table, page, limit} = req.query;
         const resContent = await displayData({
-            dataSource,
             table,
             page,
             limit
@@ -71,4 +69,6 @@ app.get('/api/display', async (req, res, next) => {
 //         await dataSource.destroy();
 // })
 
-app.listen(process.env.SERVERPORT?? 3000)
+const server = app.listen(process.env.SERVERPORT?? 3000)
+
+module.exports = {app, server, job};

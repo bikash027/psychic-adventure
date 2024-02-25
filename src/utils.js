@@ -3,8 +3,9 @@ const Sport = require('./entity/sport.entity.js')
 const Event = require('./entity/event.entity.js')
 const Post = require('./entity/post.entity.js')
 const { faker } = require('@faker-js/faker')
+const {dataSource} = require('./db.js');
 
-const addData = async ({dataSource, table, num}) => {
+const addData = async ({table, num}) => {
     if(table == 'users'){
         if(num > 10){
             num = 10;
@@ -111,7 +112,7 @@ const addData = async ({dataSource, table, num}) => {
     }
 }
 
-const displayData = async ({dataSource, table, page, limit}) => {
+const displayData = async ({table, page, limit}) => {
     // let {page, limit} = options;
     page = page? parseInt(page): 1;
     limit = limit? parseInt(limit): 10;
@@ -142,4 +143,27 @@ const displayData = async ({dataSource, table, page, limit}) => {
     return {meta, items};
 }
 
-module.exports = {addData, displayData}
+const calculatePopularity = async () => {
+    const analyticsData = await dataSource.getRepository(Post)
+        .createQueryBuilder('post')
+        .leftJoin('post.user', 'user')
+        .select('user.id', 'userId')
+        .addSelect('GROUP_CONCAT(DISTINCT post.sport_id)', 'interests')
+        .addSelect('SUM(post.comments)', 'comments')
+        .addSelect('SUM(post.likes)', 'likes')
+        .groupBy('user.id')
+        .getRawMany();
+    const allUsers = await dataSource.getRepository(User).find();
+    allUsers.forEach(user => {
+        const singleUserData = analyticsData.find(el => el.userId == user.id);
+        if(!singleUserData) return;
+        let {interests, comments, likes} = singleUserData;
+        user.interests = interests? interests.split(',').map(el => parseInt(el)): null;
+        comments = comments? parseInt(comments): 0;
+        likes = likes? parseInt(likes): 0;
+        user.popularityScore = comments + likes;
+    })
+    await dataSource.getRepository(User).save(allUsers);
+}
+
+module.exports = {addData, displayData, calculatePopularity}
